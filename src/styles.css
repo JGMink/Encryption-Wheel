@@ -1,0 +1,45 @@
+.wheel {
+  width: 350px;
+  height: 350px;
+  border: 10px solid #333;
+  border-radius: 50%;
+  position: relative;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+.wheel-letter {
+  position: absolute;
+  top: 42.5%;
+  left: 50%;
+  transform-origin: 0 100%;
+  font-size: 24px; /* Increase font size for better readability */
+  color: #333;
+  letter-spacing: 5cap; /* Add letter spacing */
+}
+
+.wheel-letter.active {
+  font-weight: bold;
+  color: green;
+}
+
+.inner-wheel {
+  position: absolute;
+  top: 8.5%;
+  left: 8.5%;
+  width: 280px; /* Adjust size as needed */
+  height: 280px; /* Adjust size as needed */
+  border: 5px solid #333; /* Inner wheel border */
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.inner-wheel-letter {
+  position: absolute;
+  top: 15.5%;
+  left: 50%;
+  transform-origin: 0 470%;
+  font-size: 18px; /* Font size for inner wheel */
+  color: #333;
+  letter-spacing: 2px;
+}
