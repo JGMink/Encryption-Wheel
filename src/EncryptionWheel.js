@@ -1,45 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./styles.css";
 import InnerWheel from "./InnerWheel"; // Assuming this component exists for displaying inner wheel letters
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 const EncryptionWheel = () => {
-  const [outerIndex, setOuterIndex] = useState(0); // Tracks the current letter index
-  const [rotationDegrees, setRotationDegrees] = useState(0); // Tracks the total rotation in degrees
-  const [hashMap, setHashMap] = useState({}); // Stores the current hash map
+  const [outerIndex, setOuterIndex] = useState(0);
+  const [rotationDegrees, setRotationDegrees] = useState(0);
+  const [spinCount, setSpinCount] = useState(0); // Track the number of spins for hashMap
 
-  const degreesPerLetter = 360 / alphabet.length; // ~13.85 degrees per letter
+  const degreesPerLetter = 360 / alphabet.length;
 
   const rotateWheel = () => {
     // Generate a random number of spins between 1 and 26
-    const randomSpin = Math.floor(Math.random() * 26) + 1; // Randomly choose a number of letters to spin (1-26)
-    
-    // Calculate the total degrees to rotate
-    const totalDegrees = randomSpin * degreesPerLetter + 360; // Add full rotation for the spin
+    const randomSpin = Math.floor(Math.random() * 26) + 1;
+    const totalDegrees = randomSpin * degreesPerLetter + 360;
 
-    // Update rotation degrees for the smooth rotation
-    setRotationDegrees(rotationDegrees + totalDegrees);
-
-    // Update the outerIndex to reflect the new position
+    // Update the visual rotation and outerIndex based on the spin
+    setRotationDegrees((prev) => prev + totalDegrees);
     const newOuterIndex = (outerIndex + randomSpin) % alphabet.length;
     setOuterIndex(newOuterIndex);
 
-    // Create a new hash map based on the same random spin
-    createHashMap(randomSpin);
+    // Update the spin count (optional)
+    setSpinCount(randomSpin);
+
+    const firstKeyNumber = alphabet.indexOf(alphabet[newOuterIndex]) + 1;
+    console.log(firstKeyNumber);
+
+    // Optionally, store or use the first key-value pair and its number
+    // Example: setFirstPair({ key: firstKey, value: firstValue, keyNumber: firstKeyNumber });
   };
 
-  const createHashMap = (shiftValue) => {
+  const hashMap = useMemo(() => {
     const newHashMap = {};
+    const startingIndex = outerIndex; // Use the current outerIndex as the starting point
+
     for (let i = 0; i < alphabet.length; i++) {
-      // The outer ring letters are the keys
-      const key = alphabet[(shiftValue + i) % alphabet.length]; // Shift keys by the random value
-      // The inner ring letters are the values (A-Z)
+      const key = alphabet[(startingIndex + i) % alphabet.length]; // Shift keys based on outerIndex
       const value = alphabet[i]; // Inner ring value (A-Z)
       newHashMap[key] = value; // Set the key-value pair
     }
-    setHashMap(newHashMap); // Update the hash map state
-  };
+    return newHashMap;
+  }, [outerIndex]); // Only recalculates when outerIndex changes
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -50,17 +52,18 @@ const EncryptionWheel = () => {
           style={{ transform: `rotate(${rotationDegrees}deg)` }}
         >
           {alphabet.split("").map((_, index) => {
-            // Get the key from the current hashMap based on the outerIndex
             const key = alphabet[(outerIndex + index) % alphabet.length];
             return (
               <div
                 key={index}
                 className="wheel-letter"
                 style={{
-                  transform: `rotate(${(index * 360) / alphabet.length}deg) translateY(-145px)`,
+                  transform: `rotate(${
+                    (index * 360) / alphabet.length
+                  }deg) translateY(-145px)`,
                 }}
               >
-                {hashMap[key] || key} {/* Show key from hashMap, default to key if not available */}
+                {hashMap[key] || key}
               </div>
             );
           })}
