@@ -12,32 +12,34 @@ const EncryptionWheel = () => {
   const degreesPerLetter = 360 / alphabet.length;
 
   const rotateWheel = () => {
-    // Generate a random number of spins between 1 and 26
-    const randomSpin = Math.floor(Math.random() * 26) + 1;
-    const totalDegrees = randomSpin * degreesPerLetter + 360;
+    // Get the current first key based on the outerIndex
+    const firstKey = alphabet[outerIndex]; // This is the current top letter
+    const firstKeyNumber = alphabet.indexOf(firstKey) + 1; // Convert to numerical value (A=1, B=2, etc.)
 
-    // Update the visual rotation and outerIndex based on the spin
-    setRotationDegrees((prev) => prev + totalDegrees);
-    const newOuterIndex = (outerIndex + randomSpin) % alphabet.length;
-    setOuterIndex(newOuterIndex);
+    console.log("First Key (before shift):", firstKey);
+    console.log("First Key Number (before shift):", firstKeyNumber);
 
-    // Update the spin count (optional)
-    setSpinCount(randomSpin);
+    // Calculate the total degrees to shift the wheel based on the firstKeyNumber
+    const additionalShiftDegrees = firstKeyNumber * degreesPerLetter; // Calculate the degrees to shift
 
-    const firstKeyNumber = alphabet.indexOf(alphabet[newOuterIndex]) + 1;
-    console.log(firstKeyNumber);
+    // Update the rotation degrees for the shift
+    setRotationDegrees((prev) => prev + additionalShiftDegrees);
 
-    // Optionally, store or use the first key-value pair and its number
-    // Example: setFirstPair({ key: firstKey, value: firstValue, keyNumber: firstKeyNumber });
+    // Update the outerIndex for the additional shift
+    const shiftedOuterIndex = (outerIndex + firstKeyNumber) % alphabet.length;
+    setOuterIndex(shiftedOuterIndex);
+
+    console.log("Shifted Outer Index:", shiftedOuterIndex);
   };
 
+  // Updated hashMap: Inner wheel letters (A-Z) as keys and outer wheel letters as values
   const hashMap = useMemo(() => {
     const newHashMap = {};
     const startingIndex = outerIndex; // Use the current outerIndex as the starting point
 
     for (let i = 0; i < alphabet.length; i++) {
-      const key = alphabet[(startingIndex + i) % alphabet.length]; // Shift keys based on outerIndex
-      const value = alphabet[i]; // Inner ring value (A-Z)
+      const key = alphabet[i]; // Inner ring value (A-Z) becomes the key
+      const value = alphabet[(startingIndex + i) % alphabet.length]; // Shifted outer ring letter becomes the value
       newHashMap[key] = value; // Set the key-value pair
     }
     return newHashMap;
@@ -49,10 +51,10 @@ const EncryptionWheel = () => {
       <div className="wheel">
         <div
           className="outer-wheel"
-          style={{ transform: `rotate(${rotationDegrees}deg)` }}
+          style={{ transform: `rotate(${rotationDegrees}deg)` }} // Rotate the outer wheel
         >
           {alphabet.split("").map((_, index) => {
-            const key = alphabet[(outerIndex + index) % alphabet.length];
+            const key = alphabet[(outerIndex + index) % alphabet.length]; // Get the key from the new hashMap
             return (
               <div
                 key={index}
@@ -63,7 +65,8 @@ const EncryptionWheel = () => {
                   }deg) translateY(-145px)`,
                 }}
               >
-                {hashMap[key] || key}
+                {hashMap[key] || key}{" "}
+                {/* Display the current value from the hashMap */}
               </div>
             );
           })}
@@ -71,12 +74,13 @@ const EncryptionWheel = () => {
 
         <InnerWheel outerIndex={outerIndex} />
       </div>
-
       <div>
-        <button onClick={rotateWheel}>Spin Wheel</button>
+        <button onClick={rotateWheel}>Shift Wheel</button>{" "}
+        {/* Updated button label */}
       </div>
       <h2>Hash Map</h2>
-      <pre>{JSON.stringify(hashMap, null, 2)}</pre>
+      <pre>{JSON.stringify(hashMap, null, 2)}</pre>{" "}
+      {/* Display the current state of the hash map */}
     </div>
   );
 };
