@@ -1,3 +1,14 @@
+/* Outer wheel rotates */
+.outer-wheel {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 1s ease-in-out; /* Smooth spin transition */
+}
+
+/* Wheel container */
 .wheel {
   width: 350px;
   height: 350px;
@@ -8,30 +19,25 @@
   overflow: hidden;
 }
 
+/* Outer wheel letters */
 .wheel-letter {
   position: absolute;
   top: 42.5%;
   left: 50%;
   transform-origin: 0 100%;
-  font-size: 24px; /* Increase font size for better readability */
+  font-size: 24px;
   color: #333;
-  letter-spacing: 5cap; /* Add letter spacing */
 }
 
-.wheel-letter.active {
-  font-weight: bold;
-  color: green;
-}
-
+/* Inner wheel remains static */
 .inner-wheel {
   position: absolute;
   top: 8.5%;
   left: 8.5%;
-  width: 280px; /* Adjust size as needed */
-  height: 280px; /* Adjust size as needed */
-  border: 5px solid #333; /* Inner wheel border */
+  width: 280px;
+  height: 280px;
+  border: 5px solid #333;
   border-radius: 50%;
-  overflow: hidden;
 }
 
 .inner-wheel-letter {
@@ -39,7 +45,6 @@
   top: 15.5%;
   left: 50%;
   transform-origin: 0 470%;
-  font-size: 18px; /* Font size for inner wheel */
+  font-size: 18px;
   color: #333;
-  letter-spacing: 2px;
 }

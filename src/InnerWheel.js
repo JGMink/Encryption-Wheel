@@ -15,7 +15,7 @@ const InnerWheel = ({ outerIndex }) => {
             }deg) translateY(-40px)`, // Adjust for inner radius
           }}
         >
-          {letter}
+          {letter} {/* Displaying the inner letters (A-Z) */}
         </div>
       ))}
     </div>
