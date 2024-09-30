@@ -4,6 +4,19 @@ body {
   font-family: "Courier New", Courier, monospace, sans-serif; /* Set a default font */
 }
 
+/* Container holding the wheel and message sections */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+/* Wheel Section */
+.wheel-section {
+  margin-right: 40px; /* Adds spacing between wheel and text section */
+}
+
 /* Outer wheel rotates */
 .outer-wheel {
   background-color: white;
@@ -54,36 +67,4 @@ body {
   transform-origin: 0 470%;
   font-size: 18px;
   color: #333;
-}
-
-/* Button styling */
-button {
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  margin: 5px;
-}
-
-button:hover {
-  background-color: #555; /* Darker shade on hover */
-}
-
-/* Encoded message section */
-.encoded-message {
-  margin-top: 20px; /* Spacing above the encoded message */
-  color: white;
-}
-
-.encoded-message h3 {
-  margin: 0; /* Remove default margin */
-  color: #333; /* Color for the heading */
-}
-
-.encoded-message p {
-  display: "inline";
-  font-size: 18px; /* Font size for encoded message */
-  color: white; /* Slightly lighter text for encoded message */
 }
