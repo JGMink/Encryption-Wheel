@@ -7,46 +7,56 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const EncryptionWheel = () => {
   const [outerIndex, setOuterIndex] = useState(0);
   const [rotationDegrees, setRotationDegrees] = useState(0);
-  const [spinCount, setSpinCount] = useState(0); // Track the number of spins for hashMap
-
+  const [inputMessage, setInputMessage] = useState(""); // State for input message
+  const [encodedMessage, setEncodedMessage] = useState(""); // State for encoded message
   const degreesPerLetter = 360 / alphabet.length;
 
   const rotateWheel = () => {
-    // Get the current first key based on the outerIndex
-    const firstKey = alphabet[outerIndex]; // This is the current top letter
-    const firstKeyNumber = alphabet.indexOf(firstKey) + 1; // Convert to numerical value (A=1, B=2, etc.)
+    const firstKey = alphabet[outerIndex];
+    const firstKeyNumber = alphabet.indexOf(firstKey) + 1;
 
-    console.log("First Key (before shift):", firstKey);
-    console.log("First Key Number (before shift):", firstKeyNumber);
-
-    // Calculate the total degrees to shift the wheel based on the firstKeyNumber
-    const additionalShiftDegrees = firstKeyNumber * degreesPerLetter; // Calculate the degrees to shift
-
-    // Update the rotation degrees for the shift
+    const additionalShiftDegrees = firstKeyNumber * degreesPerLetter;
     setRotationDegrees((prev) => prev + additionalShiftDegrees);
 
-    // Update the outerIndex for the additional shift
     const shiftedOuterIndex = (outerIndex + firstKeyNumber) % alphabet.length;
     setOuterIndex(shiftedOuterIndex);
-
-    console.log("Shifted Outer Index:", shiftedOuterIndex);
   };
 
-  // Updated hashMap: Inner wheel letters (A-Z) as keys and outer wheel letters as values
   const hashMap = useMemo(() => {
     const newHashMap = {};
-    const startingIndex = outerIndex; // Use the current outerIndex as the starting point
+    const startingIndex = outerIndex;
 
     for (let i = 0; i < alphabet.length; i++) {
-      const key = alphabet[i]; // Inner ring value (A-Z) becomes the key
-      const value = alphabet[(startingIndex + i) % alphabet.length]; // Shifted outer ring letter becomes the value
-      newHashMap[key] = value; // Set the key-value pair
+      const key = alphabet[i];
+      const value = alphabet[(startingIndex + i) % alphabet.length];
+      newHashMap[key] = value;
     }
     return newHashMap;
-  }, [outerIndex]); // Only recalculates when outerIndex changes
+  }, [outerIndex]);
+
+  const encodeMessage = () => {
+    const message = inputMessage.toUpperCase(); // Convert to uppercase for consistency
+    let encoded = "";
+
+    for (let char of message) {
+      if (alphabet.includes(char)) {
+        encoded += hashMap[char]; // Use the hashMap to encode the character
+      } else {
+        encoded += char; // Keep non-alphabetic characters unchanged
+      }
+    }
+
+    setEncodedMessage(encoded); // Update the encoded message state
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(encodedMessage).then(() => {
+      alert("Encoded message copied to clipboard!"); // Optional feedback
+    });
+  };
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{ textAlign: "center", padding: "20px" }}>
       <h1>Encryption Wheel</h1>
       <div className="wheel">
         <div
@@ -54,7 +64,7 @@ const EncryptionWheel = () => {
           style={{ transform: `rotate(${rotationDegrees}deg)` }} // Rotate the outer wheel
         >
           {alphabet.split("").map((_, index) => {
-            const key = alphabet[(outerIndex + index) % alphabet.length]; // Get the key from the new hashMap
+            const key = alphabet[(outerIndex + index) % alphabet.length];
             return (
               <div
                 key={index}
@@ -65,8 +75,7 @@ const EncryptionWheel = () => {
                   }deg) translateY(-145px)`,
                 }}
               >
-                {hashMap[key] || key}{" "}
-                {/* Display the current value from the hashMap */}
+                {hashMap[key] || key}
               </div>
             );
           })}
@@ -75,12 +84,46 @@ const EncryptionWheel = () => {
         <InnerWheel outerIndex={outerIndex} />
       </div>
       <div>
-        <button onClick={rotateWheel}>Shift Wheel</button>{" "}
-        {/* Updated button label */}
+        <button onClick={rotateWheel}>Shift Wheel</button>
       </div>
-      <h2>Hash Map</h2>
-      <pre>{JSON.stringify(hashMap, null, 2)}</pre>{" "}
-      {/* Display the current state of the hash map */}
+      <div style={{ marginTop: "20px" }}>
+        <textarea
+          placeholder="Type your message here"
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          rows="4"
+          cols="40"
+          style={{
+            border: "2px solid #333",
+            borderRadius: "5px",
+            padding: "10px",
+            resize: "none",
+            marginTop: "10px",
+            width: "80%",
+          }}
+        />
+        <div>
+          <button onClick={encodeMessage}>Encode Message</button>
+        </div>
+        <div className="encoded-message" style={{ marginTop: "20px" }}>
+          <h3>Encoded Message:</h3>
+          <p style={{ display: "inline", fontSize: "18px", color: "#fff" }}>
+            {encodedMessage}
+          </p>
+          <span
+            onClick={copyToClipboard}
+            style={{
+              cursor: "pointer",
+              marginLeft: "10px",
+              fontSize: "24px",
+              color: "#333",
+            }}
+            title="Copy to clipboard"
+          >
+            👀
+          </span>
+        </div>
+      </div>
     </div>
   );
 };
