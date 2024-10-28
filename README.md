@@ -8,10 +8,10 @@ The Encryption Wheel is a tool for encrypting and decrypting messages using a ro
 - Instant feedback on encoded/decoded messages.
 
 Usage
-- Enter your message in the input field.
-- Set the rotation for your cipher.
-- Click Encrypt to see the encoded message.
-- For decryption, input the encrypted text and enter what letter on the outer-wheel corresponds to the 'A' on the inner-wheel (in the seperate text box), and click Decrypt.
+1. Enter your message in the input field.
+2. Set the rotation for your cipher.
+3. Click Encrypt to see the encoded message.
+4. For decryption, input the encrypted text and enter what letter on the outer-wheel corresponds to the 'A' on the inner-wheel (in the seperate text box), and click Decrypt.
 
 **Contributing**
 Contributions are welcome! To contribute:
