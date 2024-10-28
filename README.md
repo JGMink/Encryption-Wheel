@@ -1,5 +1,6 @@
 # Encryption Wheel
 **Overview**
+
 The Encryption Wheel is a tool for encrypting and decrypting messages using a rotational cipher. This project serves as an educational resource for understanding basic encryption techniques.
 
 **Features**
@@ -14,6 +15,7 @@ Usage
 4. For decryption, input the encrypted text and enter what letter on the outer-wheel corresponds to the 'A' on the inner-wheel (in the seperate text box), and click Decrypt.
 
 **Contributing**
+
 Contributions are welcome! To contribute:
 1. Fork the repository.
 2. Create a new branch.
@@ -21,4 +23,5 @@ Contributions are welcome! To contribute:
 4. Push your branch and open a pull request.
 
 **License**
+
 This project is licensed under the MIT License. See the LICENSE file for details.
